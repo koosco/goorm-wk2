@@ -1,7 +1,8 @@
-package com.goorm.goormweek2.member;
+package com.goorm.goormweek2.auth.ui;
 
-import com.goorm.goormweek2.member.MemberDTO.GeneralDto;
-import com.goorm.goormweek2.security.token.TokenDTO;
+import com.goorm.goormweek2.auth.application.dto.MemberDTO.GeneralDto;
+import com.goorm.goormweek2.auth.application.MemberService;
+import com.goorm.goormweek2.auth.application.dto.TokenDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class MemberController {
     public ResponseEntity<Cookie> login(@RequestBody GeneralDto generalDto) {
         TokenDTO token = memberService.login(generalDto.getEmail(), generalDto.getPassword());
         //쿠키로 변환해서 응답
+
         return ResponseEntity.ok();
     }
 

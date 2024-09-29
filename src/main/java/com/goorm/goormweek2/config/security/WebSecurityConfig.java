@@ -1,7 +1,7 @@
-package com.goorm.goormweek2.security.config;
+package com.goorm.goormweek2.config.security;
 
-import com.goorm.goormweek2.security.token.TokenAuthenticationFilter;
-import com.goorm.goormweek2.security.token.TokenProvider;
+import com.goorm.goormweek2.config.security.filter.TokenAuthenticationFilter;
+import com.goorm.goormweek2.config.security.provider.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,22 +60,20 @@ public class WebSecurityConfig {
             .sessionManagement(c ->
                 c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
+                    "/webjars/**").permitAll()
                 .requestMatchers("/", "/login", "/register").permitAll()
-                .anyRequest().authenticated()
-            )
+                .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/", true)
-                .permitAll()
-            )
+                .permitAll())
             .logout(LogoutConfigurer::permitAll)
-            .addFilterBefore(new TokenAuthenticationFilter(tokenProvider),
-                UsernamePasswordAuthenticationFilter.class)
             .logout(logout -> logout
                 .logoutUrl("/logout")
-                .permitAll()
-            )
+                .permitAll())
+            .addFilterBefore(new TokenAuthenticationFilter(tokenProvider),
+                UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 }

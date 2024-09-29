@@ -1,4 +1,4 @@
-package com.goorm.goormweek2.member;
+package com.goorm.goormweek2.auth.application.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

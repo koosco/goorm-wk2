@@ -1,4 +1,4 @@
-package com.goorm.goormweek2.member;
+package com.goorm.goormweek2.auth.repo;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

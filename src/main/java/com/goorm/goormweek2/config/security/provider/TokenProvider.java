@@ -1,8 +1,9 @@
-package com.goorm.goormweek2.security.token;
+package com.goorm.goormweek2.config.security.provider;
 
 import static java.lang.System.getenv;
 
-import com.goorm.goormweek2.member.MemberRepository;
+import com.goorm.goormweek2.auth.application.dto.TokenDTO;
+import com.goorm.goormweek2.auth.repo.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;

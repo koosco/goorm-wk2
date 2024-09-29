@@ -1,4 +1,4 @@
-package com.goorm.goormweek2.member;
+package com.goorm.goormweek2.auth.repo;
 
 import jakarta.persistence.*;
 import java.util.Collection;

@@ -1,5 +1,7 @@
-package com.goorm.goormweek2.security.token;
+package com.goorm.goormweek2.config.security.filter;
 
+import com.goorm.goormweek2.auth.application.dto.TokenDTO;
+import com.goorm.goormweek2.config.security.provider.TokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
