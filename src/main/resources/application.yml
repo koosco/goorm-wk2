@@ -3,4 +3,6 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password: YOUR_PASSWORD
+      password: 1234
+  security:
+    secret: 9bc0a269dbe8910fa16ced43ef5d14113a120fe1ab2d9b66bbd4c9bc0a269dbe8910fa16ced43ef5d14113
