@@ -1,14 +1,14 @@
 package com.goorm.goormweek2.auth.ui;
 
-import com.goorm.goormweek2.auth.application.dto.MemberDTO.GeneralDto;
 import com.goorm.goormweek2.auth.application.MemberService;
-import com.goorm.goormweek2.auth.application.dto.TokenDTO;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
+import com.goorm.goormweek2.auth.application.TokenService;
+import com.goorm.goormweek2.auth.application.dto.AccessTokenDto;
+import com.goorm.goormweek2.auth.application.dto.LoginRequestDto;
+import com.goorm.goormweek2.auth.application.dto.LoginResponseDto;
+import com.goorm.goormweek2.auth.application.dto.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,32 +17,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
 
-    MemberService memberService;
+    private final MemberService memberService;
+    private final TokenService tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody GeneralDto memberDto) {
-        memberService.register(memberDto.getEmail(), memberDto.getPassword());
+    public ResponseEntity<String> register(@RequestBody LoginRequestDto dto) {
+        memberService.register(dto.email(), dto.password());
         return ResponseEntity.ok("회원가입 성공");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Cookie> login(@RequestBody GeneralDto generalDto) {
-        TokenDTO token = memberService.login(generalDto.getEmail(), generalDto.getPassword());
-        //쿠키로 변환해서 응답
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
+        LoginResponseDto token = memberService.login(dto.email(), dto.password());
 
-        return ResponseEntity.ok();
+        return ResponseEntity.ok(token);
+    }
+
+    @PostMapping("/reissue")
+    public ResponseEntity<AccessTokenDto> reissue(@RequestBody TokenDto dto) {
+        return ResponseEntity.ok(tokenService.reissueToken(dto.token()));
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        //구현
+    public ResponseEntity<String> logout(@RequestBody TokenDto dto) {
+        memberService.logout(dto.token());
         return ResponseEntity.ok("로그아웃 성공");
     }
-
-    @GetMapping("/reissue")
-    public ResponseEntity<Cookie> reissue(HttpServletRequest request) {
-        //구현
-        return ResponseEntity.ok();
-    }
-
 }
