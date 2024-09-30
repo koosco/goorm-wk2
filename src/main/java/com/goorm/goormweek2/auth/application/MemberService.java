@@ -1,9 +1,8 @@
 package com.goorm.goormweek2.auth.application;
 
-import com.goorm.goormweek2.auth.repo.Member;
+import com.goorm.goormweek2.auth.application.dto.LoginResponseDto;
 import com.goorm.goormweek2.auth.repo.MemberRepository;
-import com.goorm.goormweek2.auth.application.dto.TokenDTO;
-import com.goorm.goormweek2.config.security.provider.TokenProvider;
+import com.goorm.goormweek2.auth.repo.entity.Member;
 import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
@@ -13,45 +12,43 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class MemberService {
+
     private final BCryptPasswordEncoder encoder;
     private final MemberRepository memberRepository;
+    private final TokenService authService;
     private final AuthenticationManager authenticationManager;
-    private final TokenProvider tokenProvider;
 
     //회원가입
     public void register(String email, String password) {
-        String encryptedPassword = encoder.encode(password);
-        Member member = Member.builder()
-            .email(email)
-            .password(encryptedPassword)
-            .build();
+        String encodedPassword = encoder.encode(password);
+        Member member = new Member(email, encodedPassword);
         memberRepository.save(member);
     }
 
-    //로그인
     @Transactional
-    public TokenDTO login(String email, String password) {
-        Member member = memberRepository.findByEmail(email)
-            .orElseThrow(() -> new NoSuchElementException("Member with email " + email + " not found"));
-        if (!encoder.matches(password, member.getPassword())) {
-            throw new IllegalArgumentException("Invalid password");
-        } else {
-            UsernamePasswordAuthenticationToken token
-                = new UsernamePasswordAuthenticationToken(email, password);
-            Authentication authentication
-                = authenticationManager.authenticate(token);
-            TokenDTO token = tokenProvider.generateToken(authentication);
+    public LoginResponseDto login(String email, String password) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() ->
+            new NoSuchElementException("Member with email " + email + " not found"));
 
-            return token;
+        validatePassword(password, member.getPassword());
+
+        Authentication token = new UsernamePasswordAuthenticationToken(email, password);
+        authenticationManager.authenticate(token);
+
+        return authService.login();
+    }
+
+    private void validatePassword(String requestPassword, String savedPassword) {
+        if (!encoder.matches(requestPassword, savedPassword)) {
+            throw new IllegalArgumentException("Invalid password");
         }
     }
 
-    //로그아웃
     public void logout(String token) {
-//        로그아웃 구현
+        authService.black(token);
     }
 }
