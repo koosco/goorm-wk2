@@ -9,7 +9,7 @@ ENV JWT_SECRET=${JWT_SECRET}
 ENV JWT_TOKEN_VALIDITY_TIME=${JWT_TOKEN_VALIDITY_TIME}
 ENV BLACKLIST_VALIDITY_TIME=${BLACKLIST_VALIDITY_TIME}
 
-COPY ./build/libs/gooiman-server-0.0.1-SNAPSHOT.jar /opt/application.jar
+COPY ./build/libs/goorm-week2-0.0.1-SNAPSHOT.jar /opt/application.jar
 
 WORKDIR /opt/
 
