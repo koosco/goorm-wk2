@@ -1,4 +1,4 @@
-package com.goorm.goormweek2.auth.repo;
+package com.goorm.goormweek2.auth.repo.entity;
 
 import jakarta.persistence.*;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "member")
 public class Member implements UserDetails {
 
@@ -27,6 +27,11 @@ public class Member implements UserDetails {
 
     @Column(length = 100)
     private String password;
+
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
